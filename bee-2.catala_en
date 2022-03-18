@@ -1,0 +1,313 @@
+# Section 001 — Definitions 1 In this Act:
+
+"apiary" means a place where bees or beehive or beekeeping equipment is kept;
+
+"bee" means the insect Apis mellifera;
+
+"beehive equipment" means hives, supers, hive covers, hive floors, queen
+excluders, frames, combs, and includes the honey, brood and pollen in the combs;
+
+"beekeeper" means a person who owns or controls bees or beehive or beekeeping
+equipment;
+
+"beekeeping equipment" means a tool, machine or other device for handling bees,
+beehive equipment or a bee product;
+
+"cappings" means the covering and adhering honey over comb cells, pollen or
+brood, that is removed before the honey extracting process;
+
+"colony" means queen, brood and accompanying adult bees;
+
+"comb" means a structure of cells composed of beeswax;
+
+"disease" includes American foulbrood, European foulbrood, chalkbrood, sacbrood,
+bee moths, the Mediterranean flour moth, nosema, acarine and any other disease
+or pest included by regulation;
+
+"hive" means beehive equipment inhabited by live bees;
+
+"inspector" means an inspector appointed under the Ministry of Agriculture and
+Food Act.
+
+# Section 002 — Beemasters
+
+The minister may issue a beemaster certificate to a beekeeper or other person
+found to be qualified by an examiner appointed by the minister.
+
+```catala
+declaration structure Individual:
+  condition is_appointed
+  condition is_temporary
+  condition has_beemaster_certificate
+
+declaration scope ValidInspector:
+  input individual content Individual
+  output is_inspector condition
+```
+
+A temporary employee appointed as an inspector under the Public Service Act must
+hold a beemaster certificate.
+
+```catala
+scope ValidInspector:
+  definition is_inspector equals
+    individual.is_appointed and
+      (not individual.is_temporary or
+        (individual.is_temporary and individual.has_beemaster_certificate))
+```
+
+
+# Section 003 — Registration of apiaries
+
+A person must not keep bees except in an apiary registered under this Act or for
+which an application for registration has been made in the preceding 15 days.
+
+# Section 004 — Registration of beekeepers and land for apiary
+
+(1) A person must not own or possess bees or beehive equipment unless the person
+is registered under this Act or has applied for registration within the
+preceding 15 days.
+
+(2) A person must not allow bees to be kept on land owned or occupied by the
+person unless the land is registered under this Act as the location of an
+apiary.
+
+(3) An inspector who has reasonable cause to believe that a person is
+contravening this section may seize and destroy or otherwise dispose of bees or
+beehive equipment in the possession of or owned by the person.
+
+
+# Section 005 — Certificate of registration
+
+(1) Subject to this Act and the
+regulations, and on payment of the prescribed fee by an applicant, the minister
+may register the applicant and issue a certificate of registration.
+
+(2) A certificate of registration must not be issued for an apiary in a new
+location that is so close to a registered apiary or an established honey
+extracting plant that it may interfere with normal beekeeping operations at the
+apiary or plant, or that there may be danger of the spread of disease.
+
+(3) If there is a conflict between the applicants about the application,
+
+(a) the Commercial Arbitration Act applies,
+
+(b) unless the parties to the conflict otherwise agree, sections 4 (1) and 17
+(1) of that Act apply to the appointment of the arbitrator, and
+
+(c) the arbitrator may make a recommendation respecting the competing
+applications to the minister and the recommendation is binding on the minister.
+
+Section 006 — Cancellation 6 The minister may cancel a certificate of
+registration
+
+(a) if, in the minister's opinion, the holder has ceased to be a beekeeper or
+has failed to comply with this Act, the regulations or an order made under this
+Act or regulations,
+
+(b) for an apiary where bees are not kept and have not been kept for a period of
+18 months beginning on any January first, or
+
+(c) with the holder's consent.
+
+Section 007 — Notice of cancellation 7 (1) If registration or a certificate of
+registration is cancelled, the minister must promptly give notice of the
+cancellation to the beekeeper by registered mail addressed to the beekeeper's
+last known recorded address.
+
+(2) The notice must also advise the beekeeper of the right to appeal.
+
+Section 008 — Appeal 8 (1) Land owners or beekeepers may appeal the cancellation
+of their registration or certificate of registration within 30 days of receiving
+the notice by delivering to the head, apiculture branch, a written appeal and a
+certified cheque in the amount set by regulation, by way of deposit.
+
+(2) An appeal board, consisting of the head, apiculture branch, and 2 persons
+appointed by the minister, one of whom must be an elected official of the
+British Columbia Honey Producers Association, must meet within 30 days.
+
+(3) If the appeal is allowed the deposit must be returned to the person
+appealing, but if the appeal is dismissed the deposit is forfeited to the
+government.
+
+Section 009 — Owner's identity 9 The owner of an apiary must maintain a sign at
+the apiary showing the name of the owner.
+
+Section 010 — Bees and equipment from outside British Columbia 10 A person must
+not bring bees, hives or beehive equipment into British Columbia unless the
+minister or person designated by the minister
+
+(a) is satisfied that the bees, hives or equipment are free of disease, and
+
+(b) has approved of the location where it is intended that the bees, hives or
+equipment be kept.
+
+Section 011 — Duty of beekeeper who suspects disease in apiary 11 A person who
+suspects disease in an apiary must immediately report the suspicion, along with
+the person's reasons, to an inspector.
+
+Section 012 — Storage of equipment 12 A person must not
+
+(a) leave beehive or beekeeping equipment, honey or cappings, or
+
+(b) permit beehive or beekeeping equipment, honey or cappings to be left
+
+where bees have access to them, other than in a hive.
+
+Section 013 — Inspection for disease 13 An inspector who receives notice or
+becomes aware of the existence of disease in an apiary or beehive equipment must
+promptly examine the apiary, beehive equipment or place where the disease
+exists.
+
+Section 014 — Disease: destruction and disinfection 14 (1) An inspector who
+finds
+
+(a) bees infected with a disease,
+
+(b) beehive equipment in which diseased bees are kept, or
+
+(c) beehive equipment which is infected with disease
+
+may destroy the bees or beehive equipment under the regulations.
+
+(2) The beekeeper who possessed the bees must disinfect buildings and beekeeping
+equipment as instructed by the inspector.
+
+Section 015 — Disease: treatment 15 If an inspector finds disease that in the
+inspector's opinion is unlikely to create serious damage, the inspector may
+treat the diseased bees or beehive equipment in accordance with the regulations
+using an antibacterial agent approved by the head, apiculture branch.
+
+Section 016 — Disease: control of movement 16 If bees or beehive equipment have
+been destroyed or treated under this Act or the regulations, a person must not
+move any remaining bees or beehive or beekeeping equipment used in the apiary or
+by the beekeeper to a different place without a permit from an inspector.
+
+Section 017 — Production of documents 17 An inspector may require the production
+for inspection of records that the inspector has reason to believe relate to the
+keeping or sale of bees or beehive or beekeeping equipment.
+
+Section 018 — Search of vehicle and seizure of contents 18 (1) An inspector may
+stop a vehicle conveying bees or beehive or beekeeping equipment or in which the
+inspector believes they may be found and search the vehicle.
+
+(2) The inspector may seize and dispose of bees or beehive or beekeeping
+equipment found in the vehicle if the inspector believes that the person who
+owns or possesses them has contravened this Act or the regulations.
+
+Section 019 — Entry on land for inspection and taking samples 19 (1) For the
+purposes of this Act or the regulations, an inspector has at all reasonable
+times free access to a place where bees or beehive or beekeeping equipment is
+kept, but must, if requested, produce a certificate of appointment as an
+inspector.
+
+(2) An inspector may at a reasonable time examine combs and other beehive
+equipment for disease.
+
+(3) An inspector may take and retain, for evidence or analysis, samples of bees,
+brood, comb or honey found by the inspector during an inspection, and must mark
+the samples with the beekeeper's name, registration number and address, the
+apiary location, the date, the sample number and the inspector's name.
+
+Section 020 — Duty to disinfect 20 An inspector must, after inspecting infected
+hives or fixtures or handling diseased bees, disinfect the inspector's body and
+clothing, and ensure that any assistants disinfect their bodies and clothing
+before inspecting another colony or proceeding to another apiary.
+
+Section 021 — Movable comb frames 21 (1) A person must not keep bees in a hive
+or structure that does not have movable frames containing combs.
+
+(2) A person must not possess beehive equipment that does not have movable
+frames for combs.
+
+(3) If a beekeeper owns or possesses a hive or beehive equipment with comb not
+individually or readily removable, an inspector may order the beekeeper to
+transfer the bees to a movable frame hive within a specified time, and destroy
+the comb in a manner specified by the inspector.
+
+(4) If a beekeeper fails to transfer bees or destroy comb under an inspection
+order, an inspector may destroy the hive and its bees or order the hive and its
+bees destroyed.
+
+Section 022 — Delivery of order 22 An inspector's order under this Act or the
+regulations must be in writing and must be delivered personally to the beekeeper
+or sent by registered mail to the beekeeper's last known recorded address.
+
+Section 023 — Disposal of used beehive equipment 23 A person must not, without a
+permit from an inspector, sell, offer for sale, rent, lend or otherwise dispose
+of used beehive equipment.
+
+Section 024 — Regulated districts 24 The minister may make regulations as
+follows:
+
+(a) establishing a breeding stock district, stock improvement district or bee
+quarantine district and prescribing standards and requirements for beekeeping
+that must be complied with in the district;
+
+(b) specifying the races or strains of bees that a person may or may not keep in
+the district;
+
+(c) prohibiting a person from taking bees, hives or beehive equipment into or
+out of a district, or both, except in accordance with the terms of a permit
+issued by an inspector.
+
+Section 025 — Abandoned apiaries 25 (1) If an apiary is not regularly attended
+in accordance with good beekeeping practice and is a hazard or a threat to
+disease control in the beekeeping industry, the minister may consider it
+abandoned and the apiary may be seized.
+
+(2) On at least 14 days' notice, if feasible, to the apiary owner, the minister
+or the minister's representative may destroy diseased equipment in an abandoned
+apiary under the regulations and may sell the remainder of the equipment at
+public auction.
+
+(3) The proceeds of the sale, after deduction of costs, must be paid
+
+(a) if the identity of the owner of the apiary is known, to the owner, or
+
+(b) if the identity of the owner is unknown or the owner cannot be found by the
+use of reasonable means, into the consolidated revenue fund.
+
+Section 026 — Following swarm of bees 26 (1) A beekeeper or the beekeeper's
+agent or employee, in following a swarm of the beekeeper's bees may enter the
+land of any person to recover them, but must not do any unnecessary damage.
+
+(2) The beekeeper and every person entering the land are liable for damage
+caused to land or property by the entry.
+
+Section 027 — Sale of bees 27 A person who sells bees in British Columbia must,
+within 15 days after the sale, provide to the head, apiculture branch, the name
+and address of the buyer and the number of packages or colonies sold.
+
+Section 028 — Beeswax salvage 28 (1) A person must not salvage or attempt to
+salvage beeswax from combs from diseased colonies without the written permission
+of an inspector.
+
+(2) The minister may provide beeswax salvage service to beekeepers with diseased
+bees or beehive equipment, but the beeswax salvage must be operated or
+supervised by an inspector.
+
+Section 029 — Certification system for colony strength 29 (1) The minister may
+establish a system for certifying colony strength for hives used in pollination
+of agricultural crops.
+
+(2) On the request of a beekeeper or agricultural producer, an inspector must
+inspect a colony and, if appropriate, certify its strength.
+
+(3) The colony strength of a beehive must be certified on the basis of the
+number of active combs of bees or the square inches of brood to a colony, or
+both, using a sampling system approved by the minister.
+
+Section 030 — Offence and penalty 30 (1) A person who contravenes, fails to
+carry out or prevents or hinders the carrying out of a provision of this Act,
+the regulations or an order or permit under this Act or the regulations commits
+an offence.
+
+(2) A certificate signed by the minister stating that an apiary or person
+identified in the certificate was or was not registered under this Act on a
+stated date is admissible in evidence as proof of the facts stated in the
+certificate without proof of the signature or appointment of the person signing
+the certificate.
+
+Section 031 — Power to make regulations 31 The Lieutenant Governor in Council
+may make regulations referred to in section 41 of the Interpretation Act.

@@ -1,0 +1,220 @@
+```catala-metadata
+declaration structure Individual:
+  data income content money
+  data number_of_children content integer
+```
+
+```catala-metadata
+declaration enumeration TaxCredit:
+-- NoTaxCredit
+-- ChildrenTaxCredit content integer
+```
+
+```catala-metadata
+declaration scope IncomeTaxComputation:
+  input individual content Individual
+  internal fixed_percentage content decimal
+  output income_tax content money
+```
+
+```catala
+scope IncomeTaxComputation:
+  definition income_tax equals
+    individual.income *$ fixed_percentage
+```
+
+```catala
+scope IncomeTaxComputation:
+  definition fixed_percentage equals 20 %
+```
+
+```catala
+scope IncomeTaxComputation:
+  definition fixed_percentage under condition
+    individual.number_of_children >= 2
+  consequence equals 15 %
+```
+
+```catala-metadata
+declaration scope Child:
+  input age content integer
+  output is_eligible_article_3 condition
+
+scope Child:
+  rule is_eligible_article_3 under condition
+    age < 18 consequence fulfilled
+```
+
+```catala
+declaration structure TwoBrackets:
+  data breakpoint content money
+  data rate1 content decimal
+  data rate2 content decimal
+
+declaration scope TwoBracketsTaxComputation :
+  input brackets content TwoBrackets
+  output tax_formula content money depends on money
+```
+
+```catala
+scope TwoBracketsTaxComputation :
+  definition tax_formula of income equals
+    if income <=$ brackets.breakpoint then
+      income *$ brackets.rate1
+    else (
+      brackets.breakpoint *$ brackets.rate1 +$
+      (income -$ brackets.breakpoint) *$ brackets.rate2
+    )
+```
+
+```catala
+declaration scope NewIncomeTaxComputation:
+  two_brackets scope TwoBracketsTaxComputation
+  input individual content Individual
+  output income_tax content money
+
+scope NewIncomeTaxComputation :
+  definition two_brackets.brackets equals TwoBrackets {
+    -- breakpoint: $100,000
+    -- rate1: 20%
+    -- rate2: 40%
+  }
+
+  definition income_tax equals two_brackets.tax_formula of individual.income
+```
+
+
+```catala
+scope NewIncomeTaxComputation:
+  definition income_tax under condition
+    individual.income <=$ $10,000
+  consequence equals $0
+```
+
+
+```catala
+declaration scope Test1:
+  tax_computation scope NewIncomeTaxComputation
+  output income_tax content money
+
+scope Test1:
+  definition
+    tax_computation.individual
+
+  equals
+    Individual {
+      -- income: $230,000
+      -- number_of_children: 0
+    }
+
+  definition income_tax equals tax_computation.income_tax
+  assertion income_tax = $72,000
+```
+
+```catala
+declaration scope Test2:
+  tax_computation scope NewIncomeTaxComputation
+  output income_tax content money
+
+scope Test2:
+  definition tax_computation.individual equals Individual {
+    -- income: $4,000
+    -- number_of_children: 0
+  }
+
+  definition income_tax equals tax_computation.income_tax
+  assertion income_tax = $0
+```
+
+```catala
+declaration scope NewIncomeTaxComputationFixed:
+  two_brackets scope TwoBracketsTaxComputation
+  input individual content Individual
+  output tax_formula content money depends on money
+  context output income_tax content money
+
+scope NewIncomeTaxComputationFixed :
+  definition two_brackets.brackets equals TwoBrackets {
+    -- breakpoint: $100,000
+    -- rate1: 20%
+    -- rate2: 40%
+  }
+  definition tax_formula of income equals two_brackets.tax_formula of income
+```
+
+```catala
+scope NewIncomeTaxComputationFixed:
+  label article_5
+  definition income_tax equals two_brackets.tax_formula of individual.income
+
+  exception article_5
+  definition income_tax under condition
+    individual.income <=$ $10,000
+  consequence equals $0
+```
+
+```catala
+declaration scope Test3:
+  tax_computation scope NewIncomeTaxComputationFixed
+  output income_tax content money
+
+scope Test3:
+  definition tax_computation.individual equals Individual {
+    -- income: $4,000
+    -- number_of_children: 0
+  }
+  definition income_tax equals tax_computation.income_tax
+  assertion income_tax = $0
+```
+
+```catala
+declaration scope BasisForFineDetermination:
+  tax_computation scope NewIncomeTaxComputationFixed
+  input individual content Individual
+  output basis_for_fine content money
+
+scope BasisForFineDetermination :
+  definition tax_computation.individual equals individual
+  definition basis_for_fine equals tax_computation.income_tax
+
+  definition tax_computation.income_tax under condition
+    individual.income <=$ $10,000
+  consequence equals $500
+```
+
+```catala
+declaration scope WealthTax:
+  input value_of_buildings_used_for_charity content money
+  input total_wealth content money
+  output wealth content money
+    state total
+    state after_charity_deductions
+    state after_capping
+
+scope WealthTax:
+  definition wealth state total equals total_wealth
+
+  definition wealth state after_charity_deductions equals
+    wealth -$ value_of_buildings_used_for_charity
+
+  definition wealth state after_capping equals
+    if wealth >=$ $2,500,000 then $2,500,000 else wealth
+
+  assertion wealth >$ $0
+  # Outside of the definition of "wealth", "wealth" always refer to the final
+  # state of the variable, here "after_capping".
+```
+
+```catala
+declaration scope Test4:
+  wealth_tax scope WealthTax
+  output deduction content money
+
+scope Test4:
+  definition wealth_tax.value_of_buildings_used_for_charity equals $2,000,000
+  definition wealth_tax.total_wealth equals $4,000,000
+
+  definition deduction equals wealth_tax.wealth
+  assertion deduction = $2,000,000
+```
+
