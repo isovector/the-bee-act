@@ -29,6 +29,7 @@ or pest included by regulation;
 "inspector" means an inspector appointed under the Ministry of Agriculture and
 Food Act.
 
+
 # Section 002 — Beemasters
 
 The minister may issue a beemaster certificate to a beekeeper or other person
@@ -62,6 +63,24 @@ scope ValidInspector:
 A person must not keep bees except in an apiary registered under this Act or for
 which an application for registration has been made in the preceding 15 days.
 
+```catala
+declaration enumeration Section_003_Reason:
+-- ApiaryRegistered
+-- ApiaryPendingApplication content date
+
+declaration scope ValidApiary:
+  input current_date content date
+  input reason content Section_003_Reason
+  output is_valid_apiary condition
+
+scope ValidApiary:
+  definition is_valid_apiary equals
+    match reason with pattern
+    -- ApiaryRegistered: true
+    -- ApiaryPendingApplication of application_date:
+        current_date -@ application_date <=^ 15 day
+```
+
 # Section 004 — Registration of beekeepers and land for apiary
 
 ## (1)
@@ -70,16 +89,105 @@ A person must not own or possess bees or beehive equipment unless the person is
 registered under this Act or has applied for registration within the preceding
 15 days.
 
+```catala
+declaration enumeration Section_004_1_Reason:
+-- PersonRegistered
+-- PersonPendingApplication content date
+
+
+declaration scope Section_004_1_Result:
+  input current_date content date
+  input reason content Section_004_1_Reason
+  output result condition
+
+scope Section_004_1_Result:
+  definition result equals
+    match reason with pattern
+    -- PersonRegistered: true
+    -- PersonPendingApplication of application_date:
+        current_date -@ application_date <=^ 15 day
+
+
+declaration scope MayOwnBees:
+  section_004_1 scope Section_004_1_Result
+  input current_date content date
+  input reason content Section_004_1_Reason
+  output may_own_bees condition
+
+scope MayOwnBees:
+  definition section_004_1.current_date
+    equals current_date
+  definition section_004_1.reason
+    equals reason
+  definition may_own_bees
+    equals section_004_1.result
+
+
+declaration scope MayOwnBeehiveEquipment:
+  section_004_1 scope Section_004_1_Result
+  input current_date content date
+  input reason content Section_004_1_Reason
+  output may_own_beehive_equipment condition
+
+scope MayOwnBeehiveEquipment:
+  definition section_004_1.current_date
+    equals current_date
+  definition section_004_1.reason
+    equals reason
+  definition may_own_beehive_equipment
+    equals section_004_1.result
+```
+
 ## (2)
 
 A person must not allow bees to be kept on land owned or occupied by the person
 unless the land is registered under this Act as the location of an apiary.
+
+```catala
+# This is a bad encoding of the unit type
+declaration structure Section_004_2_Person:
+  condition is_allowing_bees
+
+declaration structure Land:
+  condition has_bees_being_kept
+  condition has_beehive_equiment
+  condition is_registered_as_having_an_apiary
+  data owner    content Section_004_2_Person
+  data occupier content Section_004_2_Person
+
+declaration scope CanLandHaveBees:
+  input land content Land
+  output result condition
+
+scope CanLandHaveBees:
+  definition result
+    equals land.is_registered_as_having_an_apiary
+
+declaration scope ViolationOfSection_004_2:
+  input person content Section_004_2_Person
+  input land content Land
+  output result condition
+
+scope ViolationOfSection_004_2:
+  definition result
+    equals
+        # This is a question of statutory interpretation; do the bees actually
+        # need to be present in order to be in violation?
+           land.has_bees_being_kept
+       and not land.is_registered_as_having_an_apiary
+       and ( land.owner    = person
+          or land.occupier = person
+           )
+       and person.is_allowing_bees
+```
 
 ## (3)
 
 An inspector who has reasonable cause to believe that a person is contravening
 this section may seize and destroy or otherwise dispose of bees or beehive
 equipment in the possession of or owned by the person.
+
+[TODO]
 
 
 # Section 005 — Certificate of registration
@@ -90,6 +198,24 @@ Subject to this Act and the regulations, and on payment of the prescribed fee by
 an applicant, the minister may register the applicant and issue a certificate of
 registration.
 
+```catala
+declaration scope Section_005_1:
+  input fees_paid condition
+  input minister_approves condition
+  input close_to_other_apiaries condition
+  output register_applicant_and_issue_certificate condition
+
+scope Section_005_1:
+  label section_005_2
+  definition register_applicant_and_issue_certificate
+    equals fees_paid and minister_approves
+
+  exception section_005_2
+  definition register_applicant_and_issue_certificate
+    under condition close_to_other_apiaries
+    consequence equals false
+```
+
 ## (2)
 
 A certificate of registration must not be issued for an apiary in a new
@@ -97,13 +223,18 @@ location that is so close to a registered apiary or an established honey
 extracting plant that it may interfere with normal beekeeping operations at the
 apiary or plant, or that there may be danger of the spread of disease.
 
+```catala
+# see `exception section_005_2`
+# and also catala bug #238
+```
+
 ## (3)
 
 If there is a conflict between the applicants about the application,
 
 * (a) the Commercial Arbitration Act applies,
-* (b) unless the parties to the conflict otherwise agree, sections 4 (1) and 17 (1)
-  of that Act apply to the appointment of the arbitrator, and
+* (b) unless the parties to the conflict otherwise agree, sections 4 (1)
+  and 17 (1) of that Act apply to the appointment of the arbitrator, and
 * (c) the arbitrator may make a recommendation respecting the competing
   applications to the minister and the recommendation is binding on the
   minister.
@@ -113,10 +244,10 @@ If there is a conflict between the applicants about the application,
 The minister may cancel a certificate of registration
 
 * (a) if, in the minister's opinion, the holder has ceased to be a beekeeper or
-  has failed to comply with this Act, the regulations or an order made under this
-  Act or regulations,
-* (b) for an apiary where bees are not kept and have not been kept for a period of 18
-  months beginning on any January first, or
+  has failed to comply with this Act, the regulations or an order made under
+  this Act or regulations,
+* (b) for an apiary where bees are not kept and have not been kept for a period
+  of 18 months beginning on any January first, or
 * (c) with the holder's consent.
 
 # Section 007 — Notice of cancellation
